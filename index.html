@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App with Biometric Authentication</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h1>Biometric Authentication Example</h1>
+    <button id="authenticate-btn">Authenticate with Fingerprint</button>
+
+    <script>
+        // Проверяем, доступен ли BiometricManager в текущей среде
+        if (Telegram.WebApp.isAvailable && Telegram.WebApp.BiometricManager) {
+            const biometricManager = Telegram.WebApp.BiometricManager;
+
+            document.getElementById('authenticate-btn').addEventListener('click', async () => {
+                try {
+                    // Настраиваем параметры для биометрической аутентификации
+                    const params = {
+                        reason: "Please authenticate to proceed",
+                        silent: false
+                    };
+
+                    // Вызываем метод biometricAuthenticate
+                    const result = await biometricManager.biometricAuthenticate(params);
+                    
+                    if (result.authenticated) {
+                        alert("Authentication successful!");
+                        // Дальнейшие действия после успешной аутентификации
+                    } else {
+                        alert("Authentication failed!");
+                    }
+                } catch (error) {
+                    console.error("Biometric authentication error:", error);
+                    alert("An error occurred during authentication.");
+                }
+            });
+        } else {
+            alert("BiometricManager is not available in this environment.");
+        }
+    </script>
+</body>
+</html>
