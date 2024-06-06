@@ -12,34 +12,36 @@
 
     <script>
         // Проверяем, доступен ли BiometricManager в текущей среде
-        if (Telegram.WebApp.isAvailable && Telegram.WebApp.BiometricManager) {
-            const biometricManager = Telegram.WebApp.BiometricManager;
+        Telegram.WebApp.onEvent('webview_ready', function() {
+            if (Telegram.WebApp.isAvailable && Telegram.WebApp.BiometricManager) {
+                const biometricManager = Telegram.WebApp.BiometricManager;
 
-            document.getElementById('authenticate-btn').addEventListener('click', async () => {
-                try {
-                    // Настраиваем параметры для биометрической аутентификации
-                    const params = {
-                        reason: "Please authenticate to proceed",
-                        silent: false
-                    };
+                document.getElementById('authenticate-btn').addEventListener('click', async () => {
+                    try {
+                        // Настраиваем параметры для биометрической аутентификации
+                        const params = {
+                            reason: "Please authenticate to proceed",
+                            silent: false
+                        };
 
-                    // Вызываем метод biometricAuthenticate
-                    const result = await biometricManager.biometricAuthenticate(params);
-                    
-                    if (result.authenticated) {
-                        alert("Authentication successful!");
-                        // Дальнейшие действия после успешной аутентификации
-                    } else {
-                        alert("Authentication failed!");
+                        // Вызываем метод biometricAuthenticate
+                        const result = await biometricManager.biometricAuthenticate(params);
+                        
+                        if (result.authenticated) {
+                            alert("Authentication successful!");
+                            // Дальнейшие действия после успешной аутентификации
+                        } else {
+                            alert("Authentication failed!");
+                        }
+                    } catch (error) {
+                        console.error("Biometric authentication error:", error);
+                        alert("An error occurred during authentication.");
                     }
-                } catch (error) {
-                    console.error("Biometric authentication error:", error);
-                    alert("An error occurred during authentication.");
-                }
-            });
-        } else {
-            alert("BiometricManager is not available in this environment.");
-        }
+                });
+            } else {
+                alert("BiometricManager is not available in this environment.");
+            }
+        });
     </script>
 </body>
 </html>
