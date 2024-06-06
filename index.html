@@ -27,7 +27,17 @@
                 const biometricManager = Telegram.WebApp.BiometricManager;
 
                 document.getElementById('authenticate-btn').addEventListener('click', async () => {
+                    console.log("Authenticate button clicked");
                     try {
+                        // Проверяем, поддерживается ли биометрическая аутентификация
+                        const canAuthenticate = await biometricManager.canAuthenticate();
+                        console.log("Can authenticate:", canAuthenticate);
+                        
+                        if (!canAuthenticate) {
+                            alert("Biometric authentication is not supported or not set up on this device.");
+                            return;
+                        }
+
                         // Настраиваем параметры для биометрической аутентификации
                         const params = {
                             reason: "Please authenticate to proceed",
@@ -36,6 +46,7 @@
 
                         // Вызываем метод biometricAuthenticate
                         const result = await biometricManager.biometricAuthenticate(params);
+                        console.log("Biometric authentication result:", result);
                         
                         if (result.authenticated) {
                             alert("Authentication successful!");
@@ -45,7 +56,7 @@
                         }
                     } catch (error) {
                         console.error("Biometric authentication error:", error);
-                        alert("An error occurred during authentication.");
+                        alert("An error occurred during authentication: " + error.message);
                     }
                 });
             } else {
