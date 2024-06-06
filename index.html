@@ -13,7 +13,17 @@
     <script>
         // Проверяем, доступен ли BiometricManager в текущей среде
         Telegram.WebApp.onEvent('webview_ready', function() {
-            if (Telegram.WebApp.isAvailable && Telegram.WebApp.BiometricManager) {
+            console.log("Webview is ready");
+
+            if (Telegram.WebApp.isAvailable) {
+                console.log("Telegram WebApp is available");
+            } else {
+                console.log("Telegram WebApp is not available");
+            }
+
+            if (Telegram.WebApp.BiometricManager) {
+                console.log("BiometricManager is available");
+
                 const biometricManager = Telegram.WebApp.BiometricManager;
 
                 document.getElementById('authenticate-btn').addEventListener('click', async () => {
@@ -39,6 +49,7 @@
                     }
                 });
             } else {
+                console.log("BiometricManager is not available");
                 alert("BiometricManager is not available in this environment.");
             }
         });
